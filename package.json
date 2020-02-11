@@ -1,0 +1,24 @@
+{
+  "name": "news-explorer-api",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "start": "cross-env NODE_ENV=production node -r dotenv/config app.js",
+    "dev": "cross-env NODE_ENV=development nodemon -r dotenv/config app.js",
+    "eslint": "cross-env NODE_ENV=development eslint --ext=.js . --ignore-path .gitignore"
+  },
+  "repository": "git@github.com:olgamiliukova/news-explorer-api.git",
+  "author": "Olga Miliukova <cogito_ergo_summ@mail.ru>",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^6.7.2",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-prettier": "^3.1.2",
+    "nodemon": "^2.0.1"
+  },
+  "dependencies": {
+    "cross-env": "^7.0.0",
+    "dotenv": "^8.2.0"
+  }
+}
