@@ -1,0 +1,72 @@
+const jwt = require('jsonwebtoken');
+const {
+  celebrate,
+  Joi,
+  Segments,
+} = require('celebrate');
+
+const { ForbiddenError, UnauthorizedError } = require('../errors');
+
+module.exports = (app) => {
+  // required is to add signup/signin routes before authorization middleware
+  const { users } = app.get('controllers');
+
+  app.post('/signup', celebrate({
+    [Segments.BODY]: Joi.object().keys({
+      email: Joi.string().required().email(),
+      password: Joi.string().required().min(8),
+      name: Joi.string().required().min(2).max(30),
+    }),
+  }), users.createUser.bind(users));
+  app.post('/signin', celebrate({
+    [Segments.BODY]: Joi.object().keys({
+      email: Joi.string().required().email(),
+      password: Joi.string().required().min(8),
+    }),
+  }), users.login.bind(users));
+
+  // eslint-disable-next-line consistent-return
+  return (req, _, next) => {
+    let { authorization } = req.headers;
+
+    if (!authorization || !authorization.startsWith('Bearer ')) {
+      const { jwt: token } = req.cookies;
+
+      if (!token) {
+        throw new UnauthorizedError();
+      }
+
+      authorization = token;
+    }
+
+    const token = authorization.replace('Bearer ', '');
+    const { JWT_SECRET } = req.app.get('.env');
+
+    try {
+      req.user = jwt.verify(token, JWT_SECRET);
+    } catch (e) {
+      throw new UnauthorizedError(e.message);
+    }
+
+    const { User } = app.get('models');
+
+    // Check if user doesn't exist
+    User.exists({ _id: req.user._id })
+      .then(
+        (isExist) => {
+          if (!isExist) {
+            throw new ForbiddenError('User has not been found to authorize');
+          }
+
+          return User.findById(req.user._id)
+            .then(
+              (user) => {
+                req.user = user;
+                next();
+              },
+            );
+        },
+      )
+      .catch(next);
+  };
+};
