@@ -3,7 +3,7 @@ const {
   NotFoundError,
   ForbiddenError,
 } = require('../errors');
-/* eslint-disable no-underscore-dangle */
+
 class ArticlesController extends ItemsController {
   _check(req, action) {
     const { id } = req.params;

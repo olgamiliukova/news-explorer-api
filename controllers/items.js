@@ -1,5 +1,5 @@
 const { NotFoundError } = require('../errors');
-/* eslint-disable no-underscore-dangle */
+
 module.exports = class ItemsController {
   constructor(model, joins = []) {
     this.model = model;

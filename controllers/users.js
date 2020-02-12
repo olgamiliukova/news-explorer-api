@@ -5,7 +5,7 @@ const {
   BadRequestError,
   ForbiddenError,
 } = require('../errors');
-/* eslint-disable no-underscore-dangle */
+
 class UsersController extends ItemsController {
   _check(req, action) {
     const { id } = req.params;

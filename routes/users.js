@@ -22,7 +22,7 @@ module.exports = (app) => {
   router.post('/', celebrate({
     [Segments.BODY]: Joi.object().keys({
       email: Joi.string().required().email(),
-      password: Joi.string().required().min(8),
+      password: Joi.string().required().min(2).max(30),
       name: Joi.string().required().min(2).max(30),
     }),
   }), users.createUser.bind(users));
@@ -30,7 +30,7 @@ module.exports = (app) => {
   router.patch('/me', celebrate({
     [Segments.BODY]: Joi.object().keys({
       email: Joi.string().email(),
-      password: Joi.string().min(8),
+      password: Joi.string().min(2).max(30),
       name: Joi.string().min(2).max(30),
     }),
   }), users.updateMe.bind(users));
@@ -41,7 +41,7 @@ module.exports = (app) => {
     }),
     [Segments.BODY]: Joi.object().keys({
       email: Joi.string().email(),
-      password: Joi.string().min(8),
+      password: Joi.string().min(2).max(30),
       name: Joi.string().min(2).max(30),
     }),
   }), users.updateItem.bind(users));

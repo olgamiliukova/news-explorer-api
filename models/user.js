@@ -39,8 +39,7 @@ const userSchema = new Schema({
   },
 });
 // make password hash instead plain one
-// eslint-disable-next-line func-names
-userSchema.pre('save', function (next) {
+userSchema.pre('save', function save(next) {
   this.password = bcrypt.hashSync([this.password, this.salt].join(), 10);
   next();
 });

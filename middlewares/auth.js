@@ -25,7 +25,6 @@ module.exports = (app) => {
     }),
   }), users.login.bind(users));
 
-  // eslint-disable-next-line consistent-return
   return (req, _, next) => {
     let { authorization } = req.headers;
 
