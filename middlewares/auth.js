@@ -33,7 +33,7 @@ module.exports = (app) => {
     }
 
     const token = authorization.replace('Bearer ', '');
-    const { JWT_SECRET } = req.app.get('.env');
+    const { JWT_SECRET } = req.app.get('config');
 
     try {
       req.user = jwt.verify(token, JWT_SECRET);

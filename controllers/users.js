@@ -32,7 +32,7 @@ class UsersController extends ItemsController {
 
     return this.model.findUserByCredentials(email, password)
       .then((user) => {
-        const { JWT_SECRET, JWT_EXPIRES_IN } = req.app.get('.env');
+        const { JWT_SECRET, JWT_EXPIRES_IN } = req.app.get('config');
         const token = jwt.sign(
           { _id: user._id },
           JWT_SECRET,

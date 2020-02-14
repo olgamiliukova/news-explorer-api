@@ -1,12 +1,14 @@
 const express = require('express');
 const seeder = require('mongoose-seed');
 
+const config = require('./config');
 const dotenv = require('./env');
 const models = require('./models');
 const seeds = require('./seeds');
 
 // Create and decorate application
 const app = [
+  config,
   dotenv,
   models,
 ].reduce(
@@ -18,7 +20,7 @@ const {
   MONGODB_HOST,
   MONGODB_PORT,
   MONGODB_NAME,
-} = app.get('.env');
+} = app.get('config');
 
 // Connect to MongoDB via Mongoose
 seeder.connect(`mongodb://${MONGODB_HOST}:${MONGODB_PORT}/${MONGODB_NAME}`, {
