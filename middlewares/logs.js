@@ -16,6 +16,7 @@ const createLogger = (
 
 module.exports = (app) => {
   const { NODE_ENV } = app.get('config');
+
   app.set(
     'logger.error',
     createLogger(
