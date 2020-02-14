@@ -51,7 +51,7 @@ class UsersController extends ItemsController {
       .catch(next);
   }
 
-  createUser(req, res, next) {
+  createItem(req, res, next) {
     const { email } = this._data(req.body);
 
     return this.model.exists({ email })
@@ -61,7 +61,7 @@ class UsersController extends ItemsController {
             throw new BadRequestError(`User with email "${email}" already exists`);
           }
 
-          return this.createItem(req, res, next);
+          return super.createItem(req, res, next);
         },
       )
       .catch(next);

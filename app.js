@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 
 const dotenv = require('./env');
+const validators = require('./validators');
 const controllers = require('./controllers');
 const middlewares = require('./middlewares');
 const models = require('./models');
@@ -11,6 +12,7 @@ const errors = require('./errors');
 const app = [
   dotenv,
   models,
+  validators,
   controllers,
   middlewares,
   routes,

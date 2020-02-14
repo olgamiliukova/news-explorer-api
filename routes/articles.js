@@ -1,54 +1,38 @@
 const { Router } = require('express');
-const {
-  celebrate,
-  Joi,
-  Segments,
-} = require('celebrate');
 
 module.exports = (app) => {
   const router = Router();
-  const { articles } = app.get('controllers');
+  const { articles: controller } = app.get('controllers');
+  const { articles: validator } = app.get('validators');
   // Get article list
-  router.get('/', articles.getArticles.bind(articles));
+  router.get(
+    '/',
+    controller.getItems.bind(controller),
+  );
   // Get article by id
-  router.get('/:id', celebrate({
-    [Segments.PARAMS]: Joi.object().keys({
-      id: Joi.objectId(),
-    }),
-  }), articles.getItem.bind(articles));
+  router.get(
+    '/:id',
+    validator.getItem,
+    controller.getItem.bind(controller),
+  );
   // Create new article
-  router.post('/', celebrate({
-    [Segments.BODY]: Joi.object().keys({
-      keyword: Joi.string().required(),
-      title: Joi.string().required(),
-      text: Joi.string().required(),
-      date: Joi.date().required(),
-      source: Joi.string().required(),
-      link: Joi.string().required().uri(),
-      image: Joi.string().required().uri(),
-    }),
-  }), articles.createArticle.bind(articles));
+  router.post(
+    '/',
+    validator.createItem,
+    controller.createItem.bind(controller),
+  );
   // Update article by id
-  router.put('/:id', celebrate({
-    [Segments.PARAMS]: Joi.object().keys({
-      id: Joi.objectId(),
-    }),
-    [Segments.BODY]: Joi.object().keys({
-      keyword: Joi.string(),
-      title: Joi.string(),
-      text: Joi.string(),
-      date: Joi.date(),
-      source: Joi.string(),
-      link: Joi.string().uri(),
-      image: Joi.string().uri(),
-    }),
-  }), articles.updateItem.bind(articles));
+  router.put(
+    '/:id',
+    validator.updateItem,
+    controller.updateItem.bind(controller),
+  );
   // Delete article by id
-  router.delete('/:id', celebrate({
-    [Segments.PARAMS]: Joi.object().keys({
-      id: Joi.objectId(),
-    }),
-  }), articles.deleteItem.bind(articles));
+  router.delete(
+    '/:id',
+    validator.deleteItem,
+    controller.deleteItem.bind(controller),
+  );
 
   return router;
 };

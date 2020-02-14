@@ -29,18 +29,18 @@ class ArticlesController extends ItemsController {
       );
   }
 
-  getArticles(req, res, next) {
+  getItem(req, res, next) {
     req.params.filter = {
       owner: req.user,
     };
 
-    return this.getItems(req, res, next);
+    return super.getItems(req, res, next);
   }
 
-  createArticle(req, res, next) {
+  createItem(req, res, next) {
     req.body.owner = req.user;
 
-    return this.createItem(req, res, next);
+    return super.createItem(req, res, next);
   }
 }
 

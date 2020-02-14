@@ -1,29 +1,23 @@
 const jwt = require('jsonwebtoken');
-const {
-  celebrate,
-  Joi,
-  Segments,
-} = require('celebrate');
 
 const { ForbiddenError, UnauthorizedError } = require('../errors');
 
 module.exports = (app) => {
   // required is to add signup/signin routes before authorization middleware
-  const { users } = app.get('controllers');
+  const { users: controller } = app.get('controllers');
+  const { users: validator } = app.get('validators');
 
-  app.post('/signup', celebrate({
-    [Segments.BODY]: Joi.object().keys({
-      email: Joi.string().required().email(),
-      password: Joi.string().required().min(8),
-      name: Joi.string().required().min(2).max(30),
-    }),
-  }), users.createUser.bind(users));
-  app.post('/signin', celebrate({
-    [Segments.BODY]: Joi.object().keys({
-      email: Joi.string().required().email(),
-      password: Joi.string().required().min(8),
-    }),
-  }), users.login.bind(users));
+  app.post(
+    '/signup',
+    validator.createItem,
+    controller.createItem.bind(controller),
+  );
+
+  app.post(
+    '/signin',
+    validator.login,
+    controller.login.bind(controller),
+  );
 
   return (req, _, next) => {
     let { authorization } = req.headers;
