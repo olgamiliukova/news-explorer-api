@@ -34,7 +34,7 @@ class ArticlesController extends ItemsController {
       owner: req.user,
     };
 
-    return super.getItems(req, res, next);
+    return super.getItem(req, res, next);
   }
 
   createItem(req, res, next) {
