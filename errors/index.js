@@ -2,6 +2,7 @@ const BadRequestError = require('./400');
 const UnauthorizedError = require('./401');
 const ForbiddenError = require('./403');
 const NotFoundError = require('./404');
+const TooManyRequestsError = require('./429');
 const InternalServerError = require('./500');
 
 module.exports = (app) => {
@@ -27,4 +28,5 @@ module.exports.BadRequestError = BadRequestError;
 module.exports.UnauthorizedError = UnauthorizedError;
 module.exports.ForbiddenError = ForbiddenError;
 module.exports.NotFoundError = NotFoundError;
+module.exports.TooManyRequestsError = TooManyRequestsError;
 module.exports.InternalServerError = InternalServerError;

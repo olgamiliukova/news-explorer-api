@@ -1,39 +1,40 @@
 const NodeRateLimiter = require('node-rate-limiter');
 
+const { TooManyRequestsError } = require('../errors');
+
 module.exports = (app) => {
-  const nodeRateLimiter = new NodeRateLimiter();
   const {
     RATE_LIMIT_LIMIT: rateLimit,
     RATE_LIMIT_EXPIRATION: expiration,
-    RATE_LIMIT_TIMEOUT: timeout,
   } = app.get('config');
 
-  return (req, res, next) => {
-    console.log(req.sessionID);
-    nodeRateLimiter.get(
-      req.sessionID,
-      {
-        rateLimit,
-        expiration,
-        timeout,
-      },
-      (err, limit) => {
-        if (err) {
-          return next(err);
-        }
+  const nodeRateLimiter = new NodeRateLimiter();
 
-        res.set('X-RateLimit-Limit', limit.total);
-        res.set('X-RateLimit-Remaining', limit.remaining);
-        res.set('X-RateLimit-Reset', limit.reset);
+  return (req, res, next) => nodeRateLimiter.get(
+    req.clientIp,
+    {
+      limit: parseInt(rateLimit, 10),
+      expire: parseInt(expiration, 10),
+    },
+    (err, limit) => {
+      if (err) {
+        return next(err);
+      }
 
-        if (limit.remaining) {
-          return next();
-        }
+      res.set('X-RateLimit-Remaining', limit.remaining);
+      res.set('X-RateLimit-Refresh', limit.refresh);
 
-        res.set('Retry-After', limit.reset);
+      if (limit.remaining) {
+        return next();
+      }
 
-        return res.send(429, `Rate limit exceeded, retry in ${limit.reset} ms`);
-      },
-    );
-  };
+      res.set('Retry-After', limit.refresh);
+
+      return next(
+        new TooManyRequestsError(
+          `Rate limit exceeded, retry in ${limit.refresh} ms`,
+        ),
+      );
+    },
+  );
 };

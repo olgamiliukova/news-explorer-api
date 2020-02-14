@@ -3,7 +3,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
 
-const session = require('./session');
+const clientIp = require('./client-ip');
 const rateLimit = require('./rate-limit');
 const auth = require('./auth');
 const logs = require('./logs');
@@ -14,7 +14,7 @@ module.exports = (app) => {
   app.use(cookieParser());
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
-  app.use(session(app));
+  app.use(clientIp(app));
   app.use(rateLimit(app));
   app.use(logs(app));
   app.use(auth(app));
