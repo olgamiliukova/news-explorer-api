@@ -6,15 +6,17 @@ const { NotFoundError } = require('../errors');
 const articles = require('./articles');
 const users = require('./users');
 
+const {
+  MESSAGE_REQUESTED_RESOURCE_NOT_FOUND,
+} = require('../config/messages');
+
 // Setup routes
 module.exports = (app) => {
   app.use('/articles', articles(app));
   app.use('/users', users(app));
 
-  const { MESSAGE_REQUESTED_RESOURCE_404 } = app.get('config');
-
   app.use('/', (_, res, next) => {
-    next(new NotFoundError(MESSAGE_REQUESTED_RESOURCE_404));
+    next(new NotFoundError(MESSAGE_REQUESTED_RESOURCE_NOT_FOUND));
   });
 
   // Add error logger

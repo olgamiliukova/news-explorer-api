@@ -1,12 +1,19 @@
 const path = require('path');
 const dotenv = require('dotenv');
 
+const {
+  MESSAGE_CONFIG_IS_REQUIRED,
+  MESSAGE_CONFIG_MISSED_KEYS,
+} = require('./config/messages');
+
 module.exports = (app) => {
   const config = dotenv.config();
 
   if (process.env.NODE_ENV === 'production') {
     if (config.error) {
-      throw new Error('Config .env is required on production');
+      throw new Error(
+        MESSAGE_CONFIG_IS_REQUIRED.replace('%config%', '.env'),
+      );
     }
 
     const distConfig = dotenv.config({
@@ -14,7 +21,9 @@ module.exports = (app) => {
     });
 
     if (distConfig.error) {
-      throw new Error('Config .env.dist is required on production');
+      throw new Error(
+        MESSAGE_CONFIG_IS_REQUIRED.replace('%config%', '.env.dist'),
+      );
     }
 
     // Check for missed keys
@@ -24,7 +33,9 @@ module.exports = (app) => {
       );
     if (missedKeys.length > 0) {
       throw new Error(
-        'Missed keys for .env: %s'.replace('%s', missedKeys.join(',')),
+        MESSAGE_CONFIG_MISSED_KEYS
+          .replace('%config%', '.env')
+          .replace('%keys%', missedKeys.join(',')),
       );
     }
   }

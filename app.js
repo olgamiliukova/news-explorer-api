@@ -44,5 +44,7 @@ mongoose
 
 // Start and listen
 app.listen(EXPRESS_PORT, () => {
-  console.log(`App listening on port ${EXPRESS_PORT}`);
+  console.log(
+    app.get('config').MESSAGE_APPLICATION_LISTENING_ON_PORT.replace('%port%', EXPRESS_PORT),
+  );
 });

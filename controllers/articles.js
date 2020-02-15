@@ -3,6 +3,10 @@ const {
   NotFoundError,
   ForbiddenError,
 } = require('../errors');
+const {
+  MESSAGE_ARTICLE_OWNER_NOT_FOUND,
+  MESSAGE_OPERATION_FORBIDDEN,
+} = require('../config/messages');
 
 class ArticlesController extends ItemsController {
   _check(req, action) {
@@ -17,11 +21,13 @@ class ArticlesController extends ItemsController {
       .then(
         (article) => {
           if (!article.owner) {
-            throw new NotFoundError('Owner of the article has not been found');
+            throw new NotFoundError(MESSAGE_ARTICLE_OWNER_NOT_FOUND);
           }
 
           if (!article.owner.equals(req.user)) {
-            throw new ForbiddenError(`Operation "${action}" is not permitted`);
+            throw new ForbiddenError(
+              MESSAGE_OPERATION_FORBIDDEN.replace('%action%', action),
+            );
           }
 
           return article;

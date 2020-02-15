@@ -1,4 +1,8 @@
 const { NotFoundError } = require('../errors');
+const {
+  MESSAGE_MODEL_NOT_FOUND,
+  MESSAGE_MODEL_NOT_FOUND_TO_ACTION,
+} = require('../config/messages');
 
 module.exports = class ItemsController {
   constructor(model, joins = []) {
@@ -32,7 +36,11 @@ module.exports = class ItemsController {
       .then(
         (isExist) => {
           if (!isExist) {
-            throw new NotFoundError(`${this.model.modelName} has not been found to ${action}`);
+            throw new NotFoundError(
+              MESSAGE_MODEL_NOT_FOUND_TO_ACTION
+                .replace('%model%', this.model.modelName)
+                .replace('%action%', action),
+            );
           }
 
           return { req, action };
@@ -43,7 +51,9 @@ module.exports = class ItemsController {
   _send(res, status = 200) {
     return (result) => {
       if (!result) {
-        throw new NotFoundError(`${this.model.modelName}(s) has(ve) not been found`);
+        throw new NotFoundError(
+          MESSAGE_MODEL_NOT_FOUND.replace('%model%', this.model.modelName),
+        );
       }
 
       return res

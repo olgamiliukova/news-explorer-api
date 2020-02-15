@@ -3,6 +3,10 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 
 const { BadRequestError } = require('../errors');
+const {
+  MESSAGE_INCORRECT_EMAIL_OR_PASSWORD,
+  MESSAGE_EMAIL_VALIDATION_FAILED,
+} = require('../config/messages');
 
 const { Schema } = mongoose;
 // User schema
@@ -21,7 +25,8 @@ const userSchema = new Schema({
       validator(value) {
         return validator.isEmail(value);
       },
-      message: (props) => `${props.value} is not a valid email`,
+      message: (props) => MESSAGE_EMAIL_VALIDATION_FAILED
+        .replace('%email% is not a valid email', props.value),
     },
   },
   password: {
@@ -49,13 +54,13 @@ userSchema.statics.findUserByCredentials = function findUserByCredentials(email,
     .select('+salt')
     .then((user) => {
       if (!user) {
-        throw new BadRequestError('Incorrect email or password');
+        throw new BadRequestError(MESSAGE_INCORRECT_EMAIL_OR_PASSWORD);
       }
 
       return bcrypt.compare([password, user.salt].join(), user.password)
         .then((matched) => {
           if (!matched) {
-            throw new BadRequestError('Incorrect email or password');
+            throw new BadRequestError(MESSAGE_INCORRECT_EMAIL_OR_PASSWORD);
           }
 
           return user;

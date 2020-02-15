@@ -1,6 +1,9 @@
 const NodeRateLimiter = require('node-rate-limiter');
 
 const { TooManyRequestsError } = require('../errors');
+const {
+  MESSAGE_RATE_LIMIT_EXCEEDED,
+} = require('../config/messages');
 
 module.exports = (app) => {
   const {
@@ -32,7 +35,7 @@ module.exports = (app) => {
 
       return next(
         new TooManyRequestsError(
-          `Rate limit exceeded, retry in ${limit.refresh} ms`,
+          MESSAGE_RATE_LIMIT_EXCEEDED.replace('%refresh%', limit.refresh),
         ),
       );
     },

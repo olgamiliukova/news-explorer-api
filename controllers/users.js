@@ -5,6 +5,10 @@ const {
   BadRequestError,
   ForbiddenError,
 } = require('../errors');
+const {
+  MESSAGE_OPERATION_FORBIDDEN,
+  MESSAGE_USER_BY_EMAIL_ALREADY_EXISTS,
+} = require('../config/messages');
 
 class UsersController extends ItemsController {
   _check(req, action) {
@@ -19,7 +23,9 @@ class UsersController extends ItemsController {
       .then(
         (user) => {
           if (!user.equals(req.user)) {
-            throw new ForbiddenError(`Operation "${action}" is not permitted`);
+            throw new ForbiddenError(
+              MESSAGE_OPERATION_FORBIDDEN.replace('%action%', action),
+            );
           }
 
           return user;
@@ -58,7 +64,9 @@ class UsersController extends ItemsController {
       .then(
         (isExist) => {
           if (isExist) {
-            throw new BadRequestError(`User with email "${email}" already exists`);
+            throw new BadRequestError(
+              MESSAGE_USER_BY_EMAIL_ALREADY_EXISTS.replace('%email%', email),
+            );
           }
 
           return super.createItem(req, res, next);

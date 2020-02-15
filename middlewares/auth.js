@@ -1,6 +1,12 @@
 const jwt = require('jsonwebtoken');
 
-const { ForbiddenError, UnauthorizedError } = require('../errors');
+const {
+  ForbiddenError,
+  UnauthorizedError,
+} = require('../errors');
+const {
+  MESSAGE_USER_NOT_FOUND_TO_AUTHORIZE,
+} = require('../config/messages');
 
 module.exports = (app) => {
   // required is to add signup/signin routes before authorization middleware
@@ -48,7 +54,7 @@ module.exports = (app) => {
       .then(
         (isExist) => {
           if (!isExist) {
-            throw new ForbiddenError('User has not been found to authorize');
+            throw new ForbiddenError(MESSAGE_USER_NOT_FOUND_TO_AUTHORIZE);
           }
 
           return User.findById(req.user._id)
