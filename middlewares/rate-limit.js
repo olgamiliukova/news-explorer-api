@@ -5,7 +5,7 @@ const { TooManyRequestsError } = require('../errors');
 module.exports = (app) => {
   const {
     RATE_LIMIT_LIMIT: rateLimit,
-    RATE_LIMIT_EXPIRATION: expiration,
+    RATE_LIMIT_EXPIRE: expiration,
   } = app.get('config');
 
   const nodeRateLimiter = new NodeRateLimiter();

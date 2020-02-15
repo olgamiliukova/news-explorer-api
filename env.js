@@ -12,5 +12,10 @@ module.exports = (app) => {
     });
   }
 
+  app.set('config', {
+    ...app.get('config'),
+    ...process.env,
+  });
+
   return app;
 };
