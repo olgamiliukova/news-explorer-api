@@ -1,0 +1,15 @@
+module.exports = {
+  MESSAGE_CONFIG_IS_REQUIRED: 'Config %config% is required on production',
+  MESSAGE_CONFIG_MISSED_KEYS: 'Missed keys for %config%: %keys%',
+  MESSAGE_ARTICLE_OWNER_NOT_FOUND: 'Owner of the article has not been found',
+  MESSAGE_OPERATION_FORBIDDEN: 'Operation "%action%" is not permitted',
+  MESSAGE_MODEL_NOT_FOUND: '%model%(s) has(ve) not been found',
+  MESSAGE_MODEL_NOT_FOUND_TO_ACTION: '%model% has not been found to %action%',
+  MESSAGE_USER_BY_EMAIL_ALREADY_EXISTS: 'User by email "%email%" already exists',
+  MESSAGE_REQUESTED_RESOURCE_NOT_FOUND: 'The requested resource has not been found',
+  MESSAGE_USER_NOT_FOUND_TO_AUTHORIZE: 'User has not been found to authorize',
+  MESSAGE_INCORRECT_EMAIL_OR_PASSWORD: 'Incorrect email or password',
+  MESSAGE_EMAIL_VALIDATION_FAILED: '%email% is not a valid email',
+  MESSAGE_RATE_LIMIT_EXCEEDED: 'Rate limit exceeded, retry in %refresh% ms',
+  MESSAGE_APPLICATION_LISTENING_ON_PORT: 'App listening on port %port%',
+};

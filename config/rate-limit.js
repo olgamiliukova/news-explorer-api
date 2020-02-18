@@ -1,0 +1,4 @@
+module.exports = {
+  RATE_LIMIT_LIMIT: 5000,
+  RATE_LIMIT_EXPIRE: 3600000,
+};
