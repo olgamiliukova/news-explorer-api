@@ -35,6 +35,14 @@ class ArticlesController extends ItemsController {
       );
   }
 
+  getItems(req, res, next) {
+    req.params.filter = {
+      owner: req.user,
+    };
+
+    return super.getItems(req, res, next);
+  }
+
   getItem(req, res, next) {
     req.params.filter = {
       owner: req.user,
